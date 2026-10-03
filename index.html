@@ -618,6 +618,19 @@ const progressText = document.getElementById("progressText");
 const progressPercent = document.getElementById("progressPercent");
 const toast = document.getElementById("toast");
 
+function sanitizeText(value) {
+    return String(value || '')
+        .replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function makeAnswerText() {
+    return userAnswers
+        .map((item, index) => `${index + 1}. ${sanitizeText(item.question)} — ${sanitizeText(item.answer)}`)
+        .join('\n');
+}
+
 function renderQuestion() {
     const question = questions[currentQuestion];
     const number = currentQuestion + 1;
@@ -649,8 +662,8 @@ function selectAnswer(index) {
     const selectedAnswer = question.answers[index];
 
     userAnswers.push({
-        question: question.text,
-        answer: selectedAnswer.text
+        question: sanitizeText(question.text),
+        answer: sanitizeText(selectedAnswer.text)
     });
 
     showToast(selectedAnswer.reaction);
@@ -670,9 +683,20 @@ function finishQuiz() {
     document.getElementById("quiz").classList.add("hidden");
     document.getElementById("final").classList.remove("hidden");
 
+    const payload = {
+        summary: "❤️ Даша прошла тест!",
+        answers: userAnswers,
+        answersText: makeAnswerText()
+    };
+
     fetch(SCRIPT_URL, {
         method: 'POST',
-        body: JSON.stringify(userAnswers)
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    }).catch(() => {
+        console.log('Результаты теста отправлены');
     });
 }
 
