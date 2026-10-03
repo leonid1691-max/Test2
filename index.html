@@ -35,6 +35,19 @@ body::before {
         radial-gradient(circle at 50% 0%, rgba(255,255,255,0.04), transparent 30%);
 }
 
+body::after {
+    content: "";
+    position: fixed;
+    width: 380px;
+    height: 380px;
+    right: -80px;
+    top: -80px;
+    border-radius: 50%;
+    background: rgba(214, 107, 139, 0.08);
+    filter: blur(30px);
+    pointer-events: none;
+}
+
 .container {
     width: 100%;
     max-width: 520px;
@@ -57,11 +70,23 @@ body::before {
         inset 0 1px 0 rgba(255,255,255,0.04);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.04), transparent 40%, transparent 60%, rgba(255,255,255,0.02));
+    pointer-events: none;
 }
 
 .top {
     text-align: center;
     margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
 }
 
 .eyebrow {
@@ -78,6 +103,7 @@ body::before {
     line-height: 1.15;
     margin: 0;
     font-weight: 500;
+    letter-spacing: 0.2px;
 }
 
 .subtitle {
@@ -88,6 +114,8 @@ body::before {
 
 .progress-wrap {
     margin: 22px 0 28px;
+    position: relative;
+    z-index: 1;
 }
 
 .progress-info {
@@ -100,7 +128,7 @@ body::before {
 
 .progress {
     width: 100%;
-    height: 5px;
+    height: 6px;
     background: rgba(255,255,255,0.08);
     border-radius: 10px;
     overflow: hidden;
@@ -111,11 +139,14 @@ body::before {
     width: 0%;
     border-radius: 10px;
     background: linear-gradient(90deg, #8c2949, #d66b8b);
+    box-shadow: 0 0 18px rgba(214, 107, 139, 0.45);
     transition: width 0.5s ease;
 }
 
 .question {
     animation: questionIn 0.45s ease;
+    position: relative;
+    z-index: 1;
 }
 
 @keyframes questionIn {
@@ -164,7 +195,8 @@ body::before {
     transition:
         transform 0.18s ease,
         background 0.18s ease,
-        border-color 0.18s ease;
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
 }
 
 .answer:active {
@@ -174,6 +206,8 @@ body::before {
 .answer:hover {
     background: rgba(255,255,255,0.075);
     border-color: rgba(214,107,139,0.35);
+    box-shadow: inset 0 0 0 1px rgba(214,107,139,0.18);
+    transform: translateY(-1px);
 }
 
 .answer-letter {
@@ -217,6 +251,8 @@ body::before {
 .final {
     text-align: center;
     animation: finalIn 0.7s ease;
+    position: relative;
+    z-index: 1;
 }
 
 @keyframes finalIn {
